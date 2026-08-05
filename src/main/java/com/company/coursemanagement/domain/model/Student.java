@@ -1,20 +1,15 @@
-package co.Proyecto_Backendll.domain.models;
+package com.company.coursemanagement.domain.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Student {
-
     private Long id;
     private String firstName;
     private String lastName;
     private String email;
     private LocalDate birthDate;
-    private List<Enrollment> enrollments;
 
     public Student() {
-        this.enrollments = new ArrayList<>();
     }
 
     public Student(Long id, String firstName, String lastName, String email, LocalDate birthDate) {
@@ -23,7 +18,6 @@ public class Student {
         this.lastName = lastName;
         this.email = email;
         this.birthDate = birthDate;
-        this.enrollments = new ArrayList<>();
     }
 
     public Long getId() {
@@ -64,14 +58,6 @@ public class Student {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public List<Enrollment> getEnrollments() {
-        return enrollments;
-    }
-
-    public void setEnrollments(List<Enrollment> enrollments) {
-        this.enrollments = enrollments;
     }
 
     @Override

@@ -1,28 +1,21 @@
-package co.Proyecto_Backendll.domain.models;
+package com.company.coursemanagement.application.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Course {
-
+public class CourseDTO {
     private Long id;
     private String code;
     private String name;
     private String description;
     private Integer maxCapacity;
-    private List<Enrollment> enrollments;
 
-    public Course() {
-        this.enrollments = new ArrayList<>();
+    public CourseDTO() {
     }
 
-    public Course(Long id, String code, String name, String description, Integer maxCapacity) {
+    public CourseDTO(Long id, String code, String name, String description, Integer maxCapacity) {
         this.id = id;
         this.code = code;
         this.name = name;
         this.description = description;
         this.maxCapacity = maxCapacity;
-        this.enrollments = new ArrayList<>();
     }
 
     public Long getId() {
@@ -63,25 +56,5 @@ public class Course {
 
     public void setMaxCapacity(Integer maxCapacity) {
         this.maxCapacity = maxCapacity;
-    }
-
-    public List<Enrollment> getEnrollments() {
-        return enrollments;
-    }
-
-    public void setEnrollments(List<Enrollment> enrollments) {
-        this.enrollments = enrollments;
-    }
-
-    @Override
-    public String toString() {
-
-        return "Course{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", maxCapacity=" + maxCapacity +
-                '}';
     }
 }
