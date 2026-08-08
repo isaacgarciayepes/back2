@@ -6,55 +6,42 @@ import com.company.coursemanagement.domain.model.Course;
 import com.company.coursemanagement.domain.repository.CourseRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-public class CourseService {
+public class CourseService implements CourseRepository {
     private final CourseRepository courseRepository;
 
     public CourseService(CourseRepository courseRepository) {
         this.courseRepository = courseRepository;
     }
 
-    public CourseDTO create(CourseDTO dto) {
-        Course course = mapToEntity(dto);
-        Course saved = courseRepository.save(course);
-        return mapToDTO(saved);
+    @Override
+    public Course save(Course course) {
+        return null;
     }
 
-    public CourseDTO findById(Long id) {
-        Course course = courseRepository.findById(id)
-                .orElseThrow(() -> new CourseNotFoundException(id));
-        return mapToDTO(course);
+    @Override
+    public Optional<Course> findById(Long id) {
+        return Optional.empty();
     }
 
-    public List<CourseDTO> findAll() {
-        return courseRepository.findAll()
-                .stream()
-                .map(this::mapToDTO)
-                .toList();
+    @Override
+    public List<Course> findAll() {
+        return null;
     }
 
-    public CourseDTO update(Long id, CourseDTO dto) {
-        if (!courseRepository.existsById(id)) {
-            throw new CourseNotFoundException(id);
-        }
-        Course course = mapToEntity(dto);
-        course.setId(id);
-        Course updated = courseRepository.update(course);
-        return mapToDTO(updated);
+    @Override
+    public Course update(Course course) {
+        return null;
     }
 
-    public void delete(Long id) {
-        if (!courseRepository.existsById(id)) {
-            throw new CourseNotFoundException(id);
-        }
-        courseRepository.deleteById(id);
+    @Override
+    public boolean deleteById(Long id) {
+        return false;
     }
 
-    private Course mapToEntity(CourseDTO dto) {
-        return new Course(dto.getId(), dto.getCode(), dto.getName(), dto.getDescription(), dto.getMaxCapacity());
-    }
-
-    private CourseDTO mapToDTO(Course course) {
-        return new CourseDTO(course.getId(), course.getCode(), course.getName(), course.getDescription(), course.getMaxCapacity());
+    @Override
+    public boolean existsById(Long id) {
+        return false;
     }
 }

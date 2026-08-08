@@ -70,4 +70,8 @@ public class Enrollment {
                 ", status=" + status +
                 '}';
     }
+
+    public Enrollment getStudent() {
+        return null;
+    }
 }
