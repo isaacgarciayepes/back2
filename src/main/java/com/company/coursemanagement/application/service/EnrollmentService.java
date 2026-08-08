@@ -1,21 +1,20 @@
 package com.company.coursemanagement.application.service;
 
-import com.company.coursemanagement.application.dto.EnrollmentDTO;
 import com.company.coursemanagement.domain.exception.BusinessException;
 import com.company.coursemanagement.domain.exception.CourseNotFoundException;
 import com.company.coursemanagement.domain.exception.EnrollmentNotFoundException;
 import com.company.coursemanagement.domain.exception.StudentNotFoundException;
-import com.company.coursemanagement.domain.model.Course;
 import com.company.coursemanagement.domain.model.Enrollment;
 import com.company.coursemanagement.domain.model.EnrollmentStatus;
 import com.company.coursemanagement.domain.repository.CourseRepository;
 import com.company.coursemanagement.domain.repository.EnrollmentRepository;
 import com.company.coursemanagement.domain.repository.StudentRepository;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
-public class EnrollmentService {
+public class EnrollmentService implements EnrollmentRepository {
+
     private final EnrollmentRepository enrollmentRepository;
     private final StudentRepository studentRepository;
     private final CourseRepository courseRepository;
@@ -28,68 +27,72 @@ public class EnrollmentService {
         this.courseRepository = courseRepository;
     }
 
-    public EnrollmentDTO create(Long studentId, Long courseId) {
+    @Override
+    public Enrollment save(Enrollment enrollment) {
+
+        Long studentId = enrollment.getStudentId();
+        Long courseId = enrollment.getCourseId();
+
+
         if (!studentRepository.existsById(studentId)) {
             throw new StudentNotFoundException(studentId);
         }
 
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new CourseNotFoundException(courseId));
+
+        if (!courseRepository.existsById(courseId)) {
+            throw new CourseNotFoundException(courseId);
+        }
+
 
         if (enrollmentRepository.existsByStudentIdAndCourseIdAndStatus(studentId, courseId, EnrollmentStatus.ACTIVE)) {
-            throw new BusinessException("Student is already actively enrolled in this course.");
+            throw new BusinessException("El estudiante ya tiene una inscripción activa en este curso.");
         }
 
-        long activeCount = enrollmentRepository.countActiveByCourseId(courseId);
-        if (activeCount >= course.getMaxCapacity()) {
-            throw new BusinessException("Course max capacity reached (" + course.getMaxCapacity() + ").");
-        }
 
-        Enrollment enrollment = new Enrollment(null, studentId, courseId, LocalDate.now(), EnrollmentStatus.ACTIVE);
-        Enrollment saved = enrollmentRepository.save(enrollment);
-        return mapToDTO(saved);
+        return enrollmentRepository.save(enrollment);
     }
 
-    public EnrollmentDTO findById(Long id) {
-        Enrollment enrollment = enrollmentRepository.findById(id)
+    @Override
+    public Optional<Enrollment> findById(Long id) {
+        return enrollmentRepository.findById(id);
+    }
+
+    @Override
+    public List<Enrollment> findAll() {
+        return enrollmentRepository.findAll();
+    }
+
+    @Override
+    public Enrollment update(Enrollment enrollment) {
+
+        enrollmentRepository.findById(enrollment.getId())
+                .orElseThrow(() -> new EnrollmentNotFoundException(enrollment.getId()));
+
+        return enrollmentRepository.update(enrollment);
+    }
+
+    @Override
+    public boolean deleteById(Long id) {
+
+        enrollmentRepository.findById(id)
                 .orElseThrow(() -> new EnrollmentNotFoundException(id));
-        return mapToDTO(enrollment);
+
+        return enrollmentRepository.deleteById(id);
     }
 
-    public List<EnrollmentDTO> findAll() {
-        return enrollmentRepository.findAll()
-                .stream()
-                .map(this::mapToDTO)
-                .toList();
+    @Override
+    public long countActiveByCourseId(Long courseId) {
+        return enrollmentRepository.countActiveByCourseId(courseId);
     }
 
-    public EnrollmentDTO cancel(Long id) {
-        Enrollment enrollment = enrollmentRepository.findById(id)
+    @Override
+    public boolean existsByStudentIdAndCourseIdAndStatus(Long studentId, Long courseId, EnrollmentStatus status) {
+        return enrollmentRepository.existsByStudentIdAndCourseIdAndStatus(studentId, courseId, status);
+    }
+
+
+    public Enrollment findEnrollmentOrThrow(Long id) {
+        return this.findById(id)
                 .orElseThrow(() -> new EnrollmentNotFoundException(id));
-
-        if (enrollment.getStatus() == EnrollmentStatus.CANCELLED) {
-            throw new BusinessException("Enrollment is already cancelled.");
-        }
-
-        enrollment.setStatus(EnrollmentStatus.CANCELLED);
-        Enrollment updated = enrollmentRepository.update(enrollment);
-        return mapToDTO(updated);
-    }
-
-    public void delete(Long id) {
-        if (enrollmentRepository.findById(id).isEmpty()) {
-            throw new EnrollmentNotFoundException(id);
-        }
-        enrollmentRepository.deleteById(id);
-    }
-
-    private EnrollmentDTO mapToDTO(Enrollment enrollment) {
-        return new EnrollmentDTO(
-                enrollment.getId(),
-                enrollment.getStudentId(),
-                enrollment.getCourseId(),
-                enrollment.getEnrollmentDate(),
-                enrollment.getStatus()
-        );
     }
 }
