@@ -2,6 +2,8 @@ package com.company.coursemanagement.infrastructure.persistence;
 
 import com.company.coursemanagement.domain.model.Student;
 import com.company.coursemanagement.domain.repository.StudentRepository;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
