@@ -1,4 +1,4 @@
-  string
+
   datasource:
     url: jbdc:mysql://localhost:3306/back2?serverTimezone=UTC&usesSSL=false&allowPublicKeyRetrieve=True
     username: isaac
