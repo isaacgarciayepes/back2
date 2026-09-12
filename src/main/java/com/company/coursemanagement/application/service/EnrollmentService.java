@@ -2,9 +2,7 @@ package com.company.coursemanagement.application.service;
 
 import com.company.coursemanagement.domain.exception.EnrollmentNotFoundException;
 import com.company.coursemanagement.domain.model.Enrollment;
-import com.company.coursemanagement.domain.repository.CourseRepository;
 import com.company.coursemanagement.domain.repository.EnrollmentRepository;
-import com.company.coursemanagement.domain.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +13,7 @@ public class EnrollmentService {
 
     private final EnrollmentRepository enrollmentRepository;
 
-    public EnrollmentService(EnrollmentRepository enrollmentRepository, StudentRepository studentRepository, CourseRepository courseRepository) {
+    public EnrollmentService(EnrollmentRepository enrollmentRepository) {
         this.enrollmentRepository = enrollmentRepository;
     }
 

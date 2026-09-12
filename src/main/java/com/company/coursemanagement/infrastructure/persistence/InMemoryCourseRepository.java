@@ -2,10 +2,11 @@ package com.company.coursemanagement.infrastructure.persistence;
 
 import com.company.coursemanagement.domain.model.Course;
 import com.company.coursemanagement.domain.repository.CourseRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
-
+@Repository
 public class InMemoryCourseRepository implements CourseRepository {
     private final Map<Long, Course> storage = new HashMap<>();
     private final AtomicLong idGenerator = new AtomicLong(1);

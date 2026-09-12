@@ -1,5 +1,6 @@
 package com.company.coursemanagement.presentation.controller;
 
+import com.company.coursemanagement.application.dto.StudentDTO;
 import com.company.coursemanagement.application.service.StudentService;
 import com.company.coursemanagement.domain.exception.BusinessException;
 import com.company.coursemanagement.domain.model.Student;
@@ -22,7 +23,9 @@ public class StudentController {
     @GetMapping
     public ResponseEntity<Object> findAll() {
         try {
-            var students = studentService.findAll();
+            var students = studentService.findAll().stream()
+                    .map(StudentDTO::from)
+                    .toList();
             return ResponseEntity.ok(students);
         } catch (BusinessException e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
@@ -34,7 +37,7 @@ public class StudentController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> findById(@PathVariable Long id) {
         try {
-            Student student = studentService.findStudentOrThrow(id);
+            var student = StudentDTO.from(studentService.findStudentOrThrow(id));
             return ResponseEntity.ok(student);
         } catch (BusinessException e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
@@ -46,7 +49,7 @@ public class StudentController {
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody Student student) {
         try {
-            Student createdStudent = studentService.create(student);
+            var createdStudent = StudentDTO.from(studentService.create(student));
             return ResponseEntity.status(HttpStatus.CREATED).body(createdStudent);
         } catch (BusinessException e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));

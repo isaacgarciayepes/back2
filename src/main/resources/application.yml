@@ -1,17 +1,14 @@
-
+spring:
   datasource:
-    url: jbdc:mysql://localhost:3306/back2?serverTimezone=UTC&usesSSL=false&allowPublicKeyRetrieve=True
+    url: jdbc:mysql://localhost:3306/back2?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieve=True
     username: isaac
     password: 1025657584
 
-
   jpa:
     hibernate:
-      dol-auto: update
+      ddl-auto: update
     open-in-view: false
-
     show-sql: true
-
     properties:
       hibernate:
         format_sql: true

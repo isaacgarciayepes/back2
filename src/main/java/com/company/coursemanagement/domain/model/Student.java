@@ -32,14 +32,18 @@ public class Student {
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     public Student() {}
 
-    public Student(Long id, String firstName, String lastName, String email, LocalDate birthDate) {
+    public Student(Long id, String firstName, String lastName, String email, LocalDate birthDate, String phoneNumber) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.birthDate = birthDate;
+        this.phoneNumber = phoneNumber;
     }
 
 
@@ -51,6 +55,7 @@ public class Student {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", birthDate=" + birthDate +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
     }
 }
